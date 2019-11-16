@@ -1,0 +1,27 @@
+############################### 
+#       Questão 1
+###############################
+y = c(90.4,90.2,90.7,90.6,90.2,90.4,90.1,90.3,90.5,90.6,89.9,90.1,90.5,90.7,
+      90.8,90.9,90.4,90.1)
+A = factor(rep(c(200,215,230),each=2,times=3))
+B = factor(rep(c(150,160,170),each=6)) 
+dados = data.frame(y,A,B)
+
+# Item A)
+
+model = aov(y~A*B)
+anova(model)
+
+# Nesse caso a Pressure(A) e a Temperature(B) são significantes, a interação não é
+# significante.
+
+# Item B)
+trat = interaction(A,B)
+bartlett.test(y~trat)
+shapiro.test(residuals(model))
+
+v_p = predict(model)
+r_m = residuals(model)
+
+plot(v_p,r_m,pch=16,xlab='Valores Preditos',ylab='Resíduos')
+abline(h=0,col='red')
