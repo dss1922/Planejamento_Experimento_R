@@ -1,1 +1,50 @@
+############################### 
+#       Questão 2
+###############################
 
+y = c(74,64,60,79,68,73,82,88,92,99,104,96,92,86,88,98,104,88,99,
+      108,95,104,110,99,99,98,102,104,99,95,108,110,99,114,111,107)
+A = factor(rep(c(0.15,0.18,0.20,0.25),each=3,times=3))
+B = factor(rep(c(0.20,0.25,0.30),each=12))
+
+dados = data.frame(y,A,B)
+
+# Item A)
+
+model = aov(y~A*B)
+anova(model)
+
+# Nesse caso depth(A) e feed rate(B) e também como a interação são significantes
+
+# Item B)
+
+trat = interaction(A,B)
+bartlett.test(y~trat)
+shapiro.test(residuals(model)) # Os residuos são normais
+
+v_p = predict(model)
+r_m = residuals(model)
+
+plot(v_p,r_m,pch=16)
+abline(h=0,col='red')
+
+library(car)
+qqp(rstandard(model))
+
+# Item c)
+
+with(dados,interaction.plot(B,A,y,type="b",pch=19,fixed=T,xlab="Feed rate",ylab="y",col=c(1,2,3)))
+
+# Item D)
+
+anova(model)
+pf(24.6628,3,24,lower.tail = F)
+pf(55.0184,2,24,lower.tail = F)
+pf(3.2324,6,24,lower.tail = F)
+
+# Questão 3
+tapply(y,B,mean)
+mu1 = 81.5833
+mu2 = 97.5833
+qmres = anova(model)$Mean[4]
+IC = (mu1 - mu2) + c(-1,1)*qt(0.975,24)*sqrt(2*qmres/3);IC
