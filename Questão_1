@@ -18,7 +18,7 @@ anova(model)
 # Item B)
 trat = interaction(A,B)
 bartlett.test(y~trat)
-shapiro.test(residuals(model))
+shapiro.test(residuals(model)) # é preciso uma transformação nos dados
 
 v_p = predict(model)
 r_m = residuals(model)
@@ -35,3 +35,9 @@ with(dados,interaction.plot(A,B,y,type="b",pch=19,fixed=T,xlab="Pressure",ylab="
 
 # Nesse caso o que proporciona um maior rendimento é com uma pressão 215 e uma
 # temperatura a 170ºC.
+
+# usando o pacote Expdes.pt
+
+require(ExpDes.pt)
+fat2.dic(A, B, y, quali = c(TRUE, TRUE), mcomp = "tukey",
+         fac.names = c("A", "B"), sigT = 0.05, sigF = 0.05)
