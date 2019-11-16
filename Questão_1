@@ -25,3 +25,13 @@ r_m = residuals(model)
 
 plot(v_p,r_m,pch=16,xlab='Valores Preditos',ylab='Resíduos')
 abline(h=0,col='red')
+
+library(car)
+qqp(rstandard(model))
+
+# Item C)
+
+with(dados,interaction.plot(A,B,y,type="b",pch=19,fixed=T,xlab="Pressure",ylab="y",col=c(1,2,3)))
+
+# Nesse caso o que proporciona um maior rendimento é com uma pressão 215 e uma
+# temperatura a 170ºC.
