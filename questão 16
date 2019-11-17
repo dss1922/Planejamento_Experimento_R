@@ -1,0 +1,60 @@
+############################### 
+#       Questão 16
+###############################
+
+y = c(196.6,196,197.7,196,199.8,199.4,198.4,198.6,199.6,200.4,200.6,200.9,198.5,197.2,
+      196,196.9,198.4,197.6,197.5,198.1,198.7,198,199.6,199,197.5,196.6,195.6,196.2,
+      197.4,198.1,197.6,198.4,197,197.8,198.5,199.8)
+
+A = factor(rep(c(2,4,8),each=12)) # Percentage concentration
+B = factor(rep(c(3,4),each=6,times=3)) # Cooking Time (hours)
+C = factor(rep(c(400,500,650),each=2,times=6)) # Pressure
+
+dados = data.frame(y,A,B,C)
+
+# Item A)
+
+model = aov(y~A*B*C)
+anova(model)
+
+# Item B)
+
+v_p = predict(model)
+r_m = residuals(model)
+
+plot(v_p,r_m,pch=16,xlab='predito',ylab='residuos')
+abline(h=0,col='red')
+
+trat = interaction(A,B,C)
+bartlett.test(y~trat)
+
+shapiro.test(residuals(model))
+
+library('car')
+qqp(rstandard(model))
+
+# Item C)
+par(mfrow=c(3,1))
+with(dados,interaction.plot(B,C,y,type="b",pch=19,fixed=T,xlab="Cooking Time",ylab="y",col=c(1,2,3)))
+with(dados,interaction.plot(B,A,y,type="b",pch=19,fixed=T,xlab="Cooking Time",ylab="y",col=c(1,2,3)))
+with(dados,interaction.plot(C,A,y,type="b",pch=19,fixed=T,xlab="Pressure",ylab="y",col=c(1,2,3)))
+
+# Para maior resistência, execute o processo com a porcentagem de madeira em 2, a pressão em 650
+# e o tempo em 4 horas.
+
+# Item D)
+y = c(196.6,196,197.7,196,199.8,199.4,198.4,198.6,199.6,200.4,200.6,200.9,198.5,197.2,
+      196,196.9,198.4,197.6,197.5,198.1,198.7,198,199.6,199,197.5,196.6,195.6,196.2,
+      197.4,198.1,197.6,198.4,197,197.8,198.5,199.8)
+
+A = rep(c(2,4,8),each=12) # Percentage concentration
+B = rep(c(3,4),each=6,times=3) # Cooking Time (hours)
+C = rep(c(400,500,650),each=2,times=6) # Pressure
+
+
+# Usando o Pacote Expdes.pt
+require(ExpDes.pt)
+
+fat3.dic(A,B,C,y, quali = c(TRUE, TRUE, TRUE), mcomp = "tukey",
+         fac.names = c("A", "B", "C"), sigT = 0.05, sigF = 0.05)
+         
